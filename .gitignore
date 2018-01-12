@@ -1,0 +1,4 @@
+.kaggle-cli/
+data/**/*.json
+*.pyc
+.ipynb_checkpoints/
