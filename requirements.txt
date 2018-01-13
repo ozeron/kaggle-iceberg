@@ -2,3 +2,10 @@ jupyter
 pandas
 pillow
 numpy
+matplotlib
+seaborn
+plotly
+keras
+tensorflow
+
+sklearn
