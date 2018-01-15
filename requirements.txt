@@ -7,5 +7,5 @@ seaborn
 plotly
 keras
 tensorflow
-
+h5py
 sklearn
