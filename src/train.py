@@ -1,8 +1,9 @@
 from sklearn.model_selection import train_test_split
 from models.simple_keras_model import simpleModel, MODEL_NAME, MODEL_PATH
-from utils import load_dataframe, transform_dataset, save_submission
+from utils import load_dataframe, transform_dataset, save_submission, save_history
 from callbacks import build_save_callbacks
 from keras.optimizers import Adam
+from keras import backend as K
 
 BATCH_SIZE = 24
 EPOCHS = 100
@@ -49,3 +50,6 @@ print('Test accuracy:', score[1])
 predicted_test = model.predict_proba(X_test)
 
 save_submission(test_df, predicted_test, filename='sub.csv')
+save_history(hist.history, model_name=MODEL_NAME)
+
+K.clear_session()

@@ -5,3 +5,4 @@ data/**/*.json
 *.hdf5
 *.csv
 __pycache__
+*.pckl

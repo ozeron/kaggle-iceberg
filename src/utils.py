@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from os import path
-
+import pickle
 
 PROJECT_HOME = path.normpath(path.join(__file__, '../..'))
 BAND_1 = 'band_1'
@@ -29,3 +29,7 @@ def save_submission(source, predicted, filename='sub.csv'):
     submission['is_iceberg'] = predicted.reshape((predicted.shape[0]))
     submission.to_csv(filename, index=False)
     return submission
+
+def save_history(history, model_name):
+    with open('%s_history.pckl' % model_name, 'wb') as file:
+        pickle.dump(history, file)
