@@ -15,41 +15,56 @@ BETA_2 = 0.999
 EPSILON = 1e-08
 DECAY = 0.0
 
-train_df = load_dataframe('train')
-test_df = load_dataframe('test')
+def train_model(modelBuilder):
+    train_df = load_dataframe('train')
+    test_df = load_dataframe('test')
 
-X_train = transform_dataset(train_df)
-X_test = transform_dataset(test_df)
+    X_train = transform_dataset(train_df)
+    X_test = transform_dataset(test_df)
 
-target_train = train_df['is_iceberg']
-X_train_cv, X_valid, y_train_cv, y_valid = train_test_split(X_train, target_train, random_state=1, train_size=0.75)
+    target_train = train_df['is_iceberg']
+    X_train_cv, X_valid, y_train_cv, y_valid = train_test_split(
+        X_train,
+        target_train,
+        random_state=1,
+        train_size=0.75
+    )
 
-model = simpleModel()
-optimizer = Adam(lr=LEARNING_RATE, beta_1=BETA_1, beta_2=BETA_2, epsilon=EPSILON, decay=DECAY)
-model.compile(loss='binary_crossentropy',
-              optimizer=optimizer,
-              metrics=['accuracy'])
-model.summary()
+    model = modelBuilder()
+    optimizer = Adam(
+        lr=LEARNING_RATE,
+        beta_1=BETA_1,
+        beta_2=BETA_2,
+        epsilon=EPSILON,
+        decay=DECAY
+    )
+    model.compile(loss='binary_crossentropy',
+                  optimizer=optimizer,
+                  metrics=['accuracy'])
+    model.summary()
+
+    callbacks = build_save_callbacks(filepath=MODEL_PATH, patience=5)
+
+    hist = model.fit(
+        X_train_cv, y_train_cv,
+        batch_size=BATCH_SIZE,
+        epochs=EPOCHS,
+        verbose=VERBOSE,
+        validation_data=(X_valid, y_valid),
+        callbacks=callbacks)
+
+    model.load_weights(filepath=MODEL_PATH)
+    score = model.evaluate(X_valid, y_valid, verbose=1)
+    print('Test loss:', score[0])
+    print('Test accuracy:', score[1])
+
+    predicted_test = model.predict_proba(X_test)
+
+    save_submission(test_df, predicted_test, filename='sub.csv')
+    save_history(hist.history, model_name=MODEL_NAME)
+
+    K.clear_session()
 
 
-callbacks = build_save_callbacks(filepath=MODEL_PATH, patience=5)
-
-hist = model.fit(
-    X_train_cv, y_train_cv,
-    batch_size=BATCH_SIZE,
-    epochs=EPOCHS,
-    verbose=VERBOSE,
-    validation_data=(X_valid, y_valid),
-    callbacks=callbacks)
-
-model.load_weights(filepath=MODEL_PATH)
-score = model.evaluate(X_valid, y_valid, verbose=1)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
-
-predicted_test = model.predict_proba(X_test)
-
-save_submission(test_df, predicted_test, filename='sub.csv')
-save_history(hist.history, model_name=MODEL_NAME)
-
-K.clear_session()
+if __name__ == '__main__':
+    train_model(simpleModel)
