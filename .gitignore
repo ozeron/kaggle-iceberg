@@ -3,3 +3,5 @@ data/**/*.json
 *.pyc
 .ipynb_checkpoints/
 *.hdf5
+*.csv
+__pycache__
