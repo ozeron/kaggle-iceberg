@@ -109,7 +109,7 @@ hist = gmodel.fit(
     validation_data=(X_valid, y_valid),
     callbacks=callbacks)
 
-gmodel.load_weights(filepath=file_path)
+gmodel.load_weights(filepath=FILE_PATH)
 score = gmodel.evaluate(X_valid, y_valid, verbose=1)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
