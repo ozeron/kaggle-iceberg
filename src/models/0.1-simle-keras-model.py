@@ -114,14 +114,14 @@ score = gmodel.evaluate(X_valid, y_valid, verbose=1)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
-X_band_test_1=np.array([np.array(band).astype(np.float32).reshape(75, 75) for band in test["band_1"]])
-X_band_test_2=np.array([np.array(band).astype(np.float32).reshape(75, 75) for band in test["band_2"]])
+X_band_test_1=np.array([np.array(band).astype(np.float32).reshape(75, 75) for band in test_df["band_1"]])
+X_band_test_2=np.array([np.array(band).astype(np.float32).reshape(75, 75) for band in test_df["band_2"]])
 X_test = np.concatenate([X_band_test_1[:, :, :, np.newaxis]
                           , X_band_test_2[:, :, :, np.newaxis]
                          , ((X_band_test_1+X_band_test_2)/2)[:, :, :, np.newaxis]], axis=-1)
 predicted_test=gmodel.predict_proba(X_test)
 
 submission = pd.DataFrame()
-submission['id']=test['id']
+submission['id']=test_df['id']
 submission['is_iceberg']=predicted_test.reshape((predicted_test.shape[0]))
 submission.to_csv('sub.csv', index=False)
