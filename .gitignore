@@ -2,3 +2,4 @@
 data/**/*.json
 *.pyc
 .ipynb_checkpoints/
+*.hdf5
