@@ -7,7 +7,8 @@ def process(df, func):
     def work_on_bands(bands):
         return np.array([func(band) for band in bands])[np.newaxis]
     array = np.concatenate([work_on_bands(bands) for bands in df], axis=0)
-    return np.moveaxis(array, 1, 3)
+    merged = np.concatenate([df, array], axis=1)
+    return np.moveaxis(merged, 1, 3)
 
 # Isolation function.
 def isolate(arr):
