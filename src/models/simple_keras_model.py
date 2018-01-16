@@ -12,7 +12,6 @@ from keras.models import Model
 from keras import initializers
 
 
-
 # COPIED
 import sys
 import os

@@ -31,5 +31,13 @@ def save_submission(source, predicted, filename='sub.csv'):
     return submission
 
 def save_history(history, model_name):
-    with open('%s_history.pckl' % model_name, 'wb') as file:
+    with open(history_object_path(model_name), 'wb') as file:
         pickle.dump(history, file)
+
+def open_history(name):
+    with open(history_object_path(name), 'rb') as f:
+        return pickle.load(f)
+
+def history_object_path(name):
+    filename = '%s_history.pckl' % name
+    return path.normpath(path.join(PROJECT_HOME, 'history', filename))

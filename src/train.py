@@ -6,7 +6,7 @@ from keras.optimizers import Adam
 from keras import backend as K
 
 BATCH_SIZE = 24
-EPOCHS = 100
+EPOCHS = 1
 VERBOSE = 1
 
 LEARNING_RATE = 0.001
