@@ -41,3 +41,7 @@ def open_history(name):
 def history_object_path(name):
     filename = '%s_history.pckl' % name
     return path.normpath(path.join(PROJECT_HOME, 'history', filename))
+
+def n_random(array, size=5):
+    indexes = np.random.choice(np.arange(array.shape[0]), size)
+    return array[indexes]
