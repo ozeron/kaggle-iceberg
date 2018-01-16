@@ -11,3 +11,4 @@ h5py
 sklearn
 scikit-image
 scipy
+kaggle-cli
