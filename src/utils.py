@@ -18,10 +18,9 @@ def load_dataframe(mode):
 def transform_dataset(df):
     X_band_1 = np.array([np.array(band).astype(np.float32).reshape(HEIGHT, WIDTH) for band in df[BAND_1]])
     X_band_2 = np.array([np.array(band).astype(np.float32).reshape(HEIGHT, WIDTH) for band in df[BAND_2]])
-    return np.concatenate([X_band_1[:, :, :, np.newaxis],
-                           X_band_2[:, :, :, np.newaxis],
-                           ((X_band_1+X_band_2)/2)[:, :, :, np.newaxis]],
-                          axis=-1)
+    return np.concatenate([X_band_1[:, np.newaxis, :, :],
+                           X_band_2[:, np.newaxis, :, :],
+                          ],axis=1)
 
 def save_submission(source, predicted, filename='sub.csv'):
     submission = pd.DataFrame()

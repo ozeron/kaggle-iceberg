@@ -11,7 +11,6 @@ from keras.layers.merge import Concatenate
 from keras.models import Model
 from keras import initializers
 
-
 # COPIED
 import sys
 import os
@@ -30,21 +29,25 @@ def simpleModel():
     #Building the model
     gmodel=Sequential()
     #Conv Layer 1
-    gmodel.add(Conv2D(64, kernel_size=(3, 3),activation='relu', input_shape=(75, 75, 3)))
-    gmodel.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
+    gmodel.add(Conv2D(64, kernel_size=(3, 3),activation='relu', input_shape=(75, 75, 2)))
     gmodel.add(Dropout(0.2))
-
+    
     #Conv Layer 2
     gmodel.add(Conv2D(128, kernel_size=(3, 3), activation='relu' ))
     gmodel.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     gmodel.add(Dropout(0.2))
 
     #Conv Layer 3
+    gmodel.add(Conv2D(128, kernel_size=(3, 3), activation='relu' ))
+    gmodel.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    gmodel.add(Dropout(0.2))
+    
+    #Conv Layer 4
     gmodel.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
     gmodel.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     gmodel.add(Dropout(0.2))
 
-    #Conv Layer 4
+    #Conv Layer 5
     gmodel.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
     gmodel.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     gmodel.add(Dropout(0.2))

@@ -4,9 +4,11 @@ from utils import load_dataframe, transform_dataset, save_submission, save_histo
 from callbacks import build_save_callbacks
 from keras.optimizers import Adam
 from keras import backend as K
+import tensorflow as tf
+from processing import isolate, process
 
 BATCH_SIZE = 24
-EPOCHS = 1
+EPOCHS = 100
 VERBOSE = 1
 
 LEARNING_RATE = 0.001
@@ -19,8 +21,8 @@ def train_model(modelBuilder):
     train_df = load_dataframe('train')
     test_df = load_dataframe('test')
 
-    X_train = transform_dataset(train_df)
-    X_test = transform_dataset(test_df)
+    X_train = process(transform_dataset(train_df), isolate)
+    X_test = process(transform_dataset(test_df), isolate)
 
     target_train = train_df['is_iceberg']
     X_train_cv, X_valid, y_train_cv, y_valid = train_test_split(
@@ -63,8 +65,10 @@ def train_model(modelBuilder):
     save_submission(test_df, predicted_test, filename='sub.csv')
     save_history(hist.history, model_name=MODEL_NAME)
 
-    K.clear_session()
-
 
 if __name__ == '__main__':
-    train_model(simpleModel)
+    with tf.device('/gpu:1'):
+        try:
+            train_model(simpleModel)
+        finally:
+            K.clear_session()
