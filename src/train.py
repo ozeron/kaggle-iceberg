@@ -49,12 +49,12 @@ def train_model(modelBuilder):
     callbacks = build_save_callbacks(filepath=MODEL_PATH, patience=5)
 
     datagen = ImageDataGenerator(
-        featurewise_center=True,
-        featurewise_std_normalization=True,
-        rotation_range=20,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        horizontal_flip=True
+#         featurewise_center=True,
+#         featurewise_std_normalization=True,
+#         rotation_range=20,
+#         width_shift_range=0.2,
+#         height_shift_range=0.2,
+#         horizontal_flip=True
     )
     datagen.fit(X_train)
 
@@ -67,7 +67,7 @@ def train_model(modelBuilder):
         epochs=EPOCHS,
         verbose=VERBOSE,
         validation_data=empty.flow(X_valid, y_valid),
-        steps_per_epoch=steps_per_epoch*2,
+        steps_per_epoch=steps_per_epoch,
         callbacks=callbacks)
 
     model.load_weights(filepath=MODEL_PATH)
