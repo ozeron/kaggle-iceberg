@@ -6,6 +6,7 @@ from keras.optimizers import Adam
 from keras import backend as K
 import tensorflow as tf
 from processing import isolate, process
+from keras.preprocessing.image import ImageDataGenerator
 
 BATCH_SIZE = 24
 EPOCHS = 100
@@ -47,12 +48,26 @@ def train_model(modelBuilder):
 
     callbacks = build_save_callbacks(filepath=MODEL_PATH, patience=5)
 
-    hist = model.fit(
-        X_train_cv, y_train_cv,
-        batch_size=BATCH_SIZE,
+    datagen = ImageDataGenerator(
+        featurewise_center=True,
+        featurewise_std_normalization=True,
+        rotation_range=20,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        horizontal_flip=True
+    )
+    datagen.fit(X_train)
+
+    empty = ImageDataGenerator()
+    empty.fit(X_valid)
+
+    steps_per_epoch = len(X_train_cv) // BATCH_SIZE
+    hist = model.fit_generator(
+        datagen.flow(X_train_cv, y_train_cv, batch_size=BATCH_SIZE),
         epochs=EPOCHS,
         verbose=VERBOSE,
-        validation_data=(X_valid, y_valid),
+        validation_data=empty.flow(X_valid, y_valid),
+        steps_per_epoch=steps_per_epoch*2,
         callbacks=callbacks)
 
     model.load_weights(filepath=MODEL_PATH)

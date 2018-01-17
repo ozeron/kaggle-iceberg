@@ -12,3 +12,4 @@ sklearn
 scikit-image
 scipy
 kaggle-cli
+tensorflow-gpu
